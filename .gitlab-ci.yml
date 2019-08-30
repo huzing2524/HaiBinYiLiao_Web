@@ -1,5 +1,8 @@
 variables:
-  # PUSH_IMAGE_REPOSITORY  -- configure it in Gitlab CI/CD Secret variables
+  PUSH_IMAGE: "registry.cn-shenzhen.aliyuncs.com/dsdiot/hbweb"
+  IMAGE_NAME: "dsdiot/dsdweb"
+  BUILD_IMAGE: "node:8.9.4-alpine"
+  BUILD_SRC_DIR: "/home/node/src"
 
 before_script:
   - echo $CI_JOB_NAME
@@ -12,38 +15,81 @@ before_script:
   # More Predefined variables (Environment variables) see https://docs.gitlab.com/ce/ci/variables/README.html
 
 stages:
-  - build
-  # - cleanup
+  - compile
+  - package
+  - cleanup
   # - test
   - deploy
 
-build:docker-image:
-  stage: build
+compile:build-dist:
+  stage: compile
   only:
     - dev
     - /^(rel|fix)-.*$/
   script:
-    - docker image build -t ${PUSH_IMAGE_REPOSITORY}:${CI_COMMIT_REF_NAME} .
-    - docker image push ${PUSH_IMAGE_REPOSITORY}:${CI_COMMIT_REF_NAME}
-    - docker image rmi ${PUSH_IMAGE_REPOSITORY}:${CI_COMMIT_REF_NAME}
+    - docker run --rm -t -u node -v ${CI_PROJECT_DIR}:${BUILD_SRC_DIR} -w ${BUILD_SRC_DIR} ${BUILD_IMAGE} npm install --quiet
+    - docker run --rm -t -u node -v ${CI_PROJECT_DIR}:${BUILD_SRC_DIR} -w ${BUILD_SRC_DIR} ${BUILD_IMAGE} npm run build
+  cache:
+    key: dist-deps
+    paths:
+      - node_modules/
+  artifacts:
+    name: "$CI_PROJECT_NAME-$CI_COMMIT_REF_NAME"
+    paths:
+      - dist/
+    expire_in: 2 days
   tags:
-    - build
-    - docker
-    - hk
+    - default
+    - compile
 
-build:docker-image-rel:
-  stage: build
+compile:build-dist-rel:
+  stage: compile
   only:
     - master
     - tags
   script:
-    - docker image build --force-rm --no-cache -t ${PUSH_IMAGE_REPOSITORY}:${CI_COMMIT_REF_NAME} .
-    - docker image push ${PUSH_IMAGE_REPOSITORY}:${CI_COMMIT_REF_NAME}
-    - docker image rmi ${PUSH_IMAGE_REPOSITORY}:${CI_COMMIT_REF_NAME}
+    - docker run --rm -t -u node -v ${CI_PROJECT_DIR}:${BUILD_SRC_DIR} -w ${BUILD_SRC_DIR} ${BUILD_IMAGE} npm install --quiet
+    - docker run --rm -t -u node -v ${CI_PROJECT_DIR}:${BUILD_SRC_DIR} -w ${BUILD_SRC_DIR} ${BUILD_IMAGE} npm run build
+  artifacts:
+    name: "$CI_PROJECT_NAME-$CI_COMMIT_REF_NAME"
+    paths:
+      - dist/
+    expire_in: 1 week
   tags:
-    - build
+    - default
+    - compile
+
+package:docker-build:
+  stage: package
+  only:
+    - dev
+    - /^(rel|fix)-.*$/
+  script:
+    - docker image build -t ${PUSH_IMAGE}:${CI_COMMIT_REF_NAME} .
+    - docker image push ${PUSH_IMAGE}:${CI_COMMIT_REF_NAME}
+    - docker image rmi ${PUSH_IMAGE}:${CI_COMMIT_REF_NAME}
+  dependencies:
+    - compile:build-dist
+  tags:
+    - default
+    - package
     - docker
-    - hk
+
+package:docker-build-tag:
+  stage: package
+  only:
+    - master
+    - tags
+  script:
+    - docker image build --force-rm --no-cache -t ${PUSH_IMAGE}:${CI_COMMIT_REF_NAME} .
+    - docker image push ${PUSH_IMAGE}:${CI_COMMIT_REF_NAME}
+    - docker image rmi ${PUSH_IMAGE}:${CI_COMMIT_REF_NAME}
+  dependencies:
+    - compile:build-dist-rel
+  tags:
+    - default
+    - package
+    - docker
 
 deploy:docker-tenv-update:
  stage: deploy

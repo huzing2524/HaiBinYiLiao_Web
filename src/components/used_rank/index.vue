@@ -25,15 +25,15 @@
       .card-bottom
         .card-bottom-item.bottom
           img(v-if="rankListItem[1] && rankListItem[1].image", :src="rankListItem[1].image")
-          img(src="./icon_hospital.png", v-else )
+          img(src="./frequency.png", v-else )
           p {{rankListItem[1]?rankListItem[1].name || rankListItem[1].name:'-'}}
         .card-bottom-item
           img(v-if="rankListItem[0] && rankListItem[0].image", :src="rankListItem[0].image")
-          img(src="./icon_hospital.png", v-else )
+          img(src="./frequency.png", v-else )
           p {{rankListItem[0]?rankListItem[0].name || rankListItem[0].name:'-'}}
         .card-bottom-item.bottom
           img(v-if="rankListItem[2] && rankListItem[2].image", :src="rankListItem[2].image")
-          img(src="./icon_hospital.png", v-else )
+          img(src="./frequency.png", v-else )
           p {{rankListItem[2]?rankListItem[2].name || rankListItem[2].name:'-'}}
 </template>
 

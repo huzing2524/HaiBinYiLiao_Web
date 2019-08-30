@@ -23,7 +23,7 @@
             svg.ali_icon(aria-hidden="true")
               use(xlink:href="#iconadd_huanzhe_")
           p 添加患者
-        .item(@click="toPatientList")
+        router-link.item(to="/doctor/patient_list")
           .icon
             svg.ali_icon(aria-hidden="true")
               use(xlink:href="#iconhuanzhe_")
@@ -77,12 +77,7 @@
       toAddRecord(){
         this.STORE_DATA()
         this.$router.push(`/doctor/add_treatment_record`)
-      },
-      toPatientList(){
-        this.STORE_DATA()
-        this.$router.push(`/doctor/patient_list`)
-        // this.$router.push(`/doctor/patient_list?from=${this.$route.fullPath}`)
-      },
+      }
     }
   }
 </script>

@@ -56,22 +56,6 @@ export default [
     }
   },
   {
-    path: '/doctor/patient_detail',
-    name: 'doctor_patient_detail',
-    component: () => import('_views/doctor/patient_detail/'),
-    meta: {
-      title: '患者治疗详情'
-    }
-  },
-  {
-    path: '/doctor/patient_edit',
-    name: 'doctor_patient_edit',
-    component: () => import('_views/doctor/patient_edit/'),
-    meta: {
-      title: '修改患者信息'
-    }
-  },
-  {
     path: '/doctor/contact_admin',
     name: 'doctor_contact_admin',
     component: () => import('_views/doctor/contact_admin/'),

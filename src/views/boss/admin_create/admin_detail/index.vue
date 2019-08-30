@@ -4,7 +4,7 @@
       .card-top
         img(:src="adminListItem.image")
         span {{adminListItem.name?adminListItem.name:adminListItem.phone}}
-        p 普通管理员
+        p 超级管理员
       .card-middle
         span 邀请人：{{adminListItem.invitor?adminListItem.invitor:'暂无'}}
         p(v-if="adminListItem.time") 邀请时间：{{adminListItem.time | GetYMDDateDecimalString}}

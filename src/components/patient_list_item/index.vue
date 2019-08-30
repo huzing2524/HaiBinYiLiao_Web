@@ -31,7 +31,7 @@
     data() {
       return {}
     },
-    props:['patientListItem','type'],
+    props:['patientListItem'],
     mounted() {
         this.filterTreatmentPart()
     },
@@ -57,12 +57,7 @@
           })
           this.$router.push(`/doctor/add_treatment_record`)
         }else{
-          if(this.type === 'hospital'){
-            this.$router.push(`/boss/patient/patient_detail?id=${item.id}`)
-          }
-          if(this.type === 'doctor'){
-            this.$router.push(`/doctor/patient_detail?id=${item.id}`)
-          }
+          this.$router.push(`/boss/patient/patient_detail?id=${item.id}`)
         }
       }
     }

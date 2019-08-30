@@ -3,7 +3,7 @@
     .item.mg_b
       .input_box
         p 治疗设备
-        p 体外冲击波治疗仪
+        p {{listItem.deviceName}}
     .item.mg_b
       .input_box.bd_b
         p 姓名
@@ -196,7 +196,7 @@
               type: 'txt'
             }).show()
             this.STORE_DATA()
-            this.$router.go(-1)
+            this.$router.replace(`/boss/patient/patient_detail?id=${this.listItem.phone}`)
           }else {
             this.$createToast({
               txt: res.data.errmsg,

@@ -1,21 +1,17 @@
 <template lang="pug">
-  .treatment_record_list.full_box(v-if="isLoad")
-    PatientListItem(:patientListItem="doctorPatientList" v-if="doctorPatientList.length" type="doctor")
-    NoParams(v-else)
+  .treatment_record_list.full_box
+    PatientListItem(:patientListItem="doctorPatientList")
 </template>
 
 <script>
   import PatientListItem from '_components/patient_list_item/'
-  import NoParams from '_components/no_params/'
   import {DoctorPatientList} from '_api/doctor/'
   export default {
     components: {
-      PatientListItem,
-      NoParams,
+      PatientListItem
     },
     data() {
       return {
-        isLoad:false,
         doctorPatientList: []
       }
     },
@@ -26,7 +22,6 @@
       getDoctorPatientList() {
         DoctorPatientList().then(res => {
           this.doctorPatientList = res.data
-          this.isLoad = true
         })
       }
     }

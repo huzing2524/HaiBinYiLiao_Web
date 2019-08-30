@@ -1,24 +1,16 @@
-FROM node:8.9.4-alpine as builder
-
-WORKDIR /app
-COPY package*.json /app/
-
-RUN npm install --quiet
-
-COPY . /app/
-
-RUN npm run build
-
-FROM nginx:1.13.9-alpine
+FROM drg.dasudian.net/library/nginx:1.13.9-alpine
 MAINTAINER Builder <builder@dasudian.com>
 
 ENV RUN_ENV="prod"
 
+# COPY docker-entrypoint.sh /entrypoint
+
 RUN set -x \
+  && apk add --no-cache su-exec \
   && rm -f /etc/nginx/conf.d/default.conf \
   && mkdir -p /usr/share/nginx/html
 
-COPY --from=builder /app/nginx-default.conf /etc/nginx/conf.d/default.conf
-COPY --from=builder /app/dist/ /usr/share/nginx/html
+COPY nginx-default.conf /etc/nginx/conf.d/default.conf
+COPY dist/ /usr/share/nginx/html
 
 # ENTRYPOINT ["/entrypoint"]

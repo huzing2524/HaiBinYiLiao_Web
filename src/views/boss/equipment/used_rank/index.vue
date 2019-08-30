@@ -10,8 +10,8 @@
           .rank-item-left
             .rank-num {{index+4}}
             .rank-info
-              img(src="./icon_hospital.png")
-              span {{item.name}}
+              img(src="./frequency.png")
+              span {{item.hospital_name}}
           .rank-item-right {{item.count}}次
 
 </template>

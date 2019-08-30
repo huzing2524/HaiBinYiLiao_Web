@@ -1,5 +1,5 @@
 <template lang="pug">
-  .patient_detail.full_box(v-if="isLoad")
+  .patient_detail.full_box
     .patient_info
       .info
         .header
@@ -12,6 +12,7 @@
               span.male(v-show="patients_summary.gender && patients_summary.gender==='0'") 男
               span.female(v-show="patients_summary.gender && patients_summary.gender==='1'") 女
             p
+              span(v-if="patients_summary.remark") {{patients_summary.remark}}
               span 保健次数：{{records.count}}次
         .info_list
           .item(v-if="patients_summary.id")
@@ -73,8 +74,6 @@
     data() {
       return {
         id:'',
-        type:'',
-        isLoad:false,
         device:{},
         patients_summary:{},
         records:{},
@@ -89,12 +88,10 @@
       ]),
       initData(){
         this.id = this.$route.query.id || ''
-        this.type = this.$route.query.type || ''
         HbPatientsDetail({},'get',this.id).then((res) => {
           this.device = res.data.device
           this.patients_summary = res.data.patients_summary
           this.records = res.data.records
-          this.isLoad = true
         }).catch(() => {
           this.$createToast({
             txt: '获取数据失败',
