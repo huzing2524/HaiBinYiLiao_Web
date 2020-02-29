@@ -30,6 +30,10 @@ module.exports = {
     https: false,
     proxy: {
       '/api': {
+        /*
+        管理员主页: 127.0.0.1:8000/boss
+        医生主页: 127.0.0.1:8000/doctor
+        */
         target: 'http://127.0.0.1:8000',
         // target: 'https://hb.tenv.dsdiot.com/hbapi/',
         ws: true,
