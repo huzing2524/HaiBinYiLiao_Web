@@ -30,8 +30,7 @@ module.exports = {
     https: false,
     proxy: {
       '/api': {
-        target: 'http://192.168.0.122:8000',
-        // target: 'http://192.168.0.126:8000',
+        target: 'http://127.0.0.1:8000',
         // target: 'https://hb.tenv.dsdiot.com/hbapi/',
         ws: true,
         changeOrigin: true,
