@@ -6,7 +6,7 @@
         span {{doctorsListItem.name?doctorsListItem.name:doctorsListItem.id}}
         p {{doctorsListItem.phone}}
     .doctor-bottom
-      p(v-if="doctorsListItem.invitor") 邀请人：潘玮柏{{doctorsListItem.invitor}}
+      p(v-if="doctorsListItem.invitor") 邀请人：{{doctorsListItem.invitor}}
       p(v-if="doctorsListItem.invite_time") 邀请时间：{{doctorsListItem.invite_time | GetYMDDateDecimalString}}
     .doctor-footer
       button(@click="showBtn") 移除
